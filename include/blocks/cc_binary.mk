@@ -25,26 +25,28 @@ endef
 define pre-after=
 $(call _FailOnEmpty,name)
 $(call _FailOnEmpty,srcs)
-_BUILD_PREFIX := $(call get,build_dir)
-_TARGET := $(_BUILD_PREFIX)$(name)
-_OBJS := $(srcs:%=$(_BUILD_PREFIX)%.o)
+_BUILD_DIR := $(call get,build_dir)
+_TARGET := $(_BUILD_DIR)$(name)
+_OBJS := $(srcs:%=$(_BUILD_DIR)%.o)
+_OBJ_DIRS := $(sort $(dir $(_OBJS)))
 endef
 
 define after=
-$(_TARGET): $(_OBJS) | $(_BUILD_PREFIX)
+$(_TARGET): $(_OBJS) | $(_BUILD_DIR)
 	$(cxx) -o $$@ $(ldflags) $$^ $(ldlibs)
 
-$(_OBJS): $(_BUILD_PREFIX)%.cc.o: %.cc | $(_BUILD_PREFIX)
+$(_OBJS): $(_BUILD_DIR)%.cc.o: %.cc | $(_BUILD_DIR) $(_OBJ_DIRS)
 	$(cxx) -o $$@ $(cppflags) $(cxxflags) -c $$^
 
-$(_BUILD_PREFIX):
+$(_BUILD_DIR) $(_OBJ_DIRS):
 	mkdir -p $$@
 
 .PHONY: clean/$(name)
 clean/$(name):
 	rm -f $(_OBJS) |:
 	rm -f $(_TARGET) |:
-	rmdir -p $(_BUILD_PREFIX) |:
+	rmdir -p $$(shell echo $(_OBJ_DIRS) | sort -r) |:
+	rmdir -p $(_BUILD_DIR) |:
 
 all: $(_TARGET)
 clean: clean/$(name)
