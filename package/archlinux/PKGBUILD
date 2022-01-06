@@ -8,7 +8,7 @@ url="https://github.com/gozhev/make.mk"
 license=('unknown')
 
 prepare() {
-	ln --symbolic --verbose "../../../." "$pkgname-$pkgver"
+	ln --force --no-target-directory --symbolic --verbose "../../../." "$pkgname-$pkgver"
 }
 
 package() {
