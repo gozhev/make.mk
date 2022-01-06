@@ -1,10 +1,10 @@
 # Maintainer: Mikhail Gozhev <m@gozhev.ru>
-pkgname=makemk
+pkgname=make.mk
 pkgver=0.0.1
 pkgrel=1
 epoch=
 pkgdesc="A set of GNU Make rules for creating less cluttered Makefiles"
-arch=()
+arch=(any)
 url="https://github.com/gozhev/make.mk"
 license=('unknown')
 groups=()
@@ -24,6 +24,11 @@ noextract=()
 md5sums=()
 validpgpkeys=()
 
+prepare() {
+	ln --symbolic --verbose "../../../." "$pkgname-$pkgver"
+}
+
 package() {
+	cd "$pkgname-$pkgver"
 	make DESTDIR="$pkgdir/" install
 }
