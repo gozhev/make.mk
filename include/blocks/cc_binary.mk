@@ -23,6 +23,8 @@ define before=
 endef
 
 define pre-after=
+$(call _FailOnEmpty,name)
+$(call _FailOnEmpty,srcs)
 _BUILD_PREFIX := $(call get,build_dir)
 _TARGET := $(_BUILD_PREFIX)$(name)
 _OBJS := $(srcs:%=$(_BUILD_PREFIX)%.o)

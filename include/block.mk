@@ -53,6 +53,7 @@ $(eval $(_Before_block))
 endef
 
 define ;
+$(if $(_BLOCK),,$(error Unknown block))
 $(eval $(value _PreAfter_$(_BLOCK)))
 $(eval $(_After_$(_BLOCK)))
 endef
