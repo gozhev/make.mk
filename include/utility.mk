@@ -10,4 +10,9 @@ define NL
 
 endef
 
+define LF
+
+
+endef
+
 endif
